@@ -1,0 +1,27 @@
+# ── Telegram bot ──────────────────────────────────────────────────────────────
+# v21+ required for Python 3.13 — v20.x breaks due to __slots__ + name-mangling change
+python-telegram-bot[job-queue]==21.3
+
+# ── Whisper (speech-to-text) ───────────────────────────────────────────────────
+openai-whisper
+
+# ── OCR fallback ───────────────────────────────────────────────────────────────
+Pillow
+pytesseract
+
+# ── HTTP (for Ollama API calls) ────────────────────────────────────────────────
+requests
+
+# ── Environment config ─────────────────────────────────────────────────────────
+python-dotenv
+
+# ── Torch (required by Whisper) — CPU-only build is sufficient ─────────────────
+# If you have a CUDA GPU, install the CUDA version instead for much faster transcription.
+# CPU:  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+# GPU:  pip install torch torchvision torchaudio  (default pip installs CUDA version)
+torch
+torchvision
+torchaudio
+
+# ── Browser automation ────────────────────────────────────────────────────────
+playwright
