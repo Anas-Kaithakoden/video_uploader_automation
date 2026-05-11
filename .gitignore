@@ -6,3 +6,4 @@ sessions/
 storage/
 videoconvert/
 .env
+start_bot.bat
