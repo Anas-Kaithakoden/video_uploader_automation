@@ -13,6 +13,7 @@ PROFILE_DIR = r"C:\Anas\projects\islamic_uploader\sessions\reddit_session"
 SUBREDDITS = [
     {"name": "TrueDeen", "flair": "Qur'an/Hadith"},
     {"name": "islam",    "flair": "Quran & Hadith"},
+    {"name": "Muslim",    "flair": "Quran/Hadith 🕋"}
 ]
 
 
