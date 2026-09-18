@@ -15,10 +15,12 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import time
 from datetime import datetime
 
 import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.error import NetworkError
 from telegram.ext import (
     Application,
     CallbackQueryHandler,
@@ -445,7 +447,16 @@ def build_app() -> Application:
     if not TELEGRAM_BOT_TOKEN:
         raise ValueError("TELEGRAM_BOT_TOKEN is not set in .env")
 
-    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    app = (
+        Application.builder()
+        .token(TELEGRAM_BOT_TOKEN)
+        .connect_timeout(30)
+        .read_timeout(120)
+        .write_timeout(120)
+        .pool_timeout(30)
+        .get_updates_read_timeout(90)
+        .build()
+    )
 
     conv = ConversationHandler(
         entry_points=[
@@ -491,4 +502,13 @@ def build_app() -> Application:
 def run_bot() -> None:
     log.info("Starting Telegram bot (polling mode)...")
     app = build_app()
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    while True:
+        try:
+            app.run_polling(allowed_updates=Update.ALL_TYPES)
+            log.warning("Bot stopped unexpectedly — restarting in 5 seconds...")
+            time.sleep(5)
+        except NetworkError as e:
+            log.warning(f"Telegram network error: {e} — retrying in 10 seconds...")
+            time.sleep(10)
+        except KeyboardInterrupt:
+            break
